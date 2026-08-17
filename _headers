@@ -1,0 +1,29 @@
+# Cache-Control zaglavlja — čita ih i Cloudflare Pages i Netlify.
+#
+# Pravilo: keširaj dugo samo ono čije ime sadrži hash sadržaja. Sve ostalo
+# ima fiksno ime, pa dobija umeren rok — inače bi izmena (npr. novi podskup
+# Font Awesome ikona) ostala nevidljiva posetiocima sa starim kešom.
+
+# Astro generiše ime sa hashom sadržaja — svaka izmena je novi URL.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fiksna imena, ali se menjaju retko (npm run fonts / npm run icons).
+/fonts/*
+  Cache-Control: public, max-age=2592000
+/webfonts/*
+  Cache-Control: public, max-age=2592000
+/images/*
+  Cache-Control: public, max-age=2592000
+
+# Ovo aktivno menjamo (dadex.css, dadex.js), pa kraće.
+/css/*
+  Cache-Control: public, max-age=86400
+/js/*
+  Cache-Control: public, max-age=86400
+
+# HTML uvek proveriti — deploy mora odmah da se vidi.
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
